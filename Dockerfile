@@ -44,14 +44,16 @@ ENV PATH /root/.cargo/bin:$PATH
 ## peanut
 RUN git clone https://github.com/pangenome/rs-peanut.git && \
 	cd rs-peanut && \
-	cargo build && \
-	cargo install --path .
+	cargo build --release
+
+ENV PATH /build/rs-peanut/target/release:$PATH
 
 ## splitfa
 RUN git clone https://github.com/ekg/splitfa.git && \
 	cd splitfa && \
-	cargo build && \
-	cargo install --path .
+	cargo build --release
+
+ENV PATH /build/splitfa/target/release:$PATH
 
 ## GraphAligner
 RUN wget -O Miniconda-latest-Linux.sh https://repo.anaconda.com/miniconda/Miniconda2-latest-Linux-x86_64.sh && \
@@ -73,6 +75,14 @@ RUN git clone --recursive https://github.com/maickrau/GraphAligner && \
         make bin/GraphAligner
 
 ENV PATH /build/GraphAligner/bin:$PATH
+
+## GNU time
+RUN wget https://ftp.gnu.org/gnu/time/time-1.9.tar.gz && \
+        tar -xzvf time-1.9.tar.gz && \
+        cd time-1.9 && \
+        ./configure --prefix=/usr && \
+        make && \
+	make install
 
 ## clone pgge repo
 RUN git clone https://github.com/pangenome/pgge.git /home/pgge
